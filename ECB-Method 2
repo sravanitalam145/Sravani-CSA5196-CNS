@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <string.h>
+void ecb_encrypt(const char* plaintext, const char* key, char* ciphertext, int len) 
+{
+    int block_size = 8; 
+    for (int i = 0; i < len; i += block_size) 
+	{
+        for (int j = 0; j < block_size; j++) 
+		{
+            ciphertext[i + j] = plaintext[i + j] ^ key[j];
+        }
+    }
+}
+void ecb_decrypt(const char* ciphertext, const char* key, char* plaintext, int len) 
+{
+    ecb_encrypt(ciphertext, key, plaintext, len);
+}
+int main() {
+    char plaintext[] = "Hello123";
+    char key[] = "Key12345"; 
+    int len = sizeof(plaintext) - 1; 
+    char ciphertext[len];
+
+    ecb_encrypt(plaintext, key, ciphertext, len);
+
+    printf("Ciphertext: ");
+    for (int i = 0; i < len; i++) 
+	{
+        printf("%02x ", (unsigned char)ciphertext[i]);
+    }
+    printf("\n");
+    char decrypted_text[len];
+    ecb_decrypt(ciphertext, key, decrypted_text, len);
+    printf("Decrypted Text: %s\n", decrypted_text);
+    return 0;
+}
